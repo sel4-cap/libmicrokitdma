@@ -19,7 +19,6 @@
 #include <error.h>
 #include <utils/util.h>
 #include <sel4/sel4.h>
-#include <uboot_print.h>
 
 /* Check consistency of bookkeeping structures */
 #define DEBUG_DMA
@@ -632,7 +631,7 @@ void *microkit_dma_alloc(
 
     if (head == NULL) {
         /* Nothing in the free list. */
-        UBOOT_LOGE("DMA pool empty, can't alloc block of size %zu (align=%u, cached=%u)",
+        ZF_LOGE("DMA pool empty, can't alloc block of size %zu (align=%u, cached=%u)",
                 size, align, cached);
         STATS(stats.failed_allocations_out_of_memory++);
         return NULL;
@@ -673,7 +672,7 @@ void *microkit_dma_alloc(
          * satisfy this allocation by defragmenting the free list and
          * re-attempting.
          */
-        UBOOT_LOGI("re-try allocation after defragmentation of free list");
+        ZF_LOGI("re-try allocation after defragmentation of free list");
         defrag();
         p = try_alloc_from_free_list(size, align, cached);
         if (p != NULL) {
@@ -769,7 +768,7 @@ static void dma_cache_op(
         seL4_ARM_VSpace_CleanInvalidate_Data(3, addr, addr + size);
         break;
     default:
-        UBOOT_LOGF("Invalid cache_op %d", op);
+        ZF_LOGF("Invalid cache_op %d", op);
         return;
     }
 #endif
@@ -780,7 +779,7 @@ int microkit_dma_manager(
     ps_dma_man_t *man)
 {
     if (man == NULL) {
-        UBOOT_LOGE("man is NULL");
+        ZF_LOGE("man is NULL");
         return -1;
     }
     man->dma_alloc_fn = dma_alloc;

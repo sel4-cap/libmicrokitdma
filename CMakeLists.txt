@@ -10,4 +10,4 @@ project(libmicrokitdma C)
 
 add_library(microkitdma STATIC EXCLUDE_FROM_ALL src/dma.c)
 target_include_directories(microkitdma PUBLIC include)
-target_link_libraries(microkitdma PUBLIC utils ubootdrivers)
+target_link_libraries(microkitdma PUBLIC utils)
